@@ -340,6 +340,7 @@ app.post("/users/signin",
 
     if (!authenticated) {
       req.flash("error", "Invalid Credentials");
+      console.log(username, password);
       res.render("signin", {
         flash: req.flash(),
         username: req.body.username,
