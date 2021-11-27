@@ -1,3 +1,4 @@
+const config = require("./lib/config"); //Provides access to environment variables located in the .env file through the dotenv module so that the data in those variables is secure
 const express = require("express"); //returns a function used for route handling and assigns it to the express constant
 const morgan = require("morgan"); //used for logging status code information
 const flash = require("express-flash"); //used for displaying flash messages
@@ -8,8 +9,8 @@ const PgPersistence = require('./lib/pg-persistence'); //Class which provides me
 const catchError = require('./lib/catch-error');
 
 const app = express(); //creates the application object by invoking the express function
-const host = "localhost";
-const port = 3000;
+const host = config.HOST;
+const port = config.PORT;
 const LokiStore = store(session); //Creates a session store by passing the session-express object to the store function provided by connect-loki
 
 app.set("views", "./views"); //tells express to look for view templates in the "views" directory
@@ -29,7 +30,7 @@ app.use(session({
   name: "launch-school-todos-session-id", //Provides a session name for session created by this application. (To differentiate it from other cookies from other apps?) This property is not required, but should always be added.
   resave: false, //
   saveUninitialized: true, //should always add this. If true, forces an 'uninitialized' session to be saved to the data store
-  secret: "this is not very secure", //required. Used to sign and ecrypt the cookie to prevent tampering. This value is sensitive and must be protected. In most apps, obtain this value from an external source that is only available to the app's servers.
+  secret: config.SECRET, //required. Used to sign and ecrypt the cookie to prevent tampering. This value is sensitive and must be protected. In most apps, obtain this value from an external source that is only available to the app's servers.
   store: new LokiStore({}), //defines an instance(?) of the data store used by express-session
 }));
 
